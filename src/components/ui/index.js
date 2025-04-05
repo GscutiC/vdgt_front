@@ -6,3 +6,7 @@ export {TextButton} from './TextButton.jsx';
 export {Card} from './Card.jsx';
 export {Avatar} from './Avatar.jsx';
 export {Container} from './Container.jsx';
+export {Flex} from './Flex.jsx';
+export {Heading} from './Heading.jsx';
+export {FormGroup} from './FormGroup.jsx';
+export {Text} from './Text.jsx';

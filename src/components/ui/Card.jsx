@@ -9,3 +9,4 @@ export function Card({children,...props}){
 
     )
 }
+export default Card

@@ -9,4 +9,4 @@ export function LinkText({href,children,...props}){
         </Link>
     )
 }
-export default Link
+export default LinkText

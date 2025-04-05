@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import {Button, Input, Label,LinkText,TextButton,Card,Avatar,Container} from '@/components/ui';
+import {Button, Input, Label,LinkText,TextButton,Card,Avatar,Container,FormGroup,Flex,Heading} from '@/components/ui';
 
 export default function LoginForm() {
   const [credentials, setCredentials] = useState({
@@ -24,41 +24,41 @@ export default function LoginForm() {
   return (
     <Container>
         <Card>
-        <div className="flex justify-center mb-6">
-          <Avatar/>
-        </div>     
-        <h1 className="text-2xl font-bold text-center mb-8">
-          Iniciar Sesión con Contraseña
-        </h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <Label htmlFor="email">ID de Empleado / Email</Label>
-            <Input  type="text"
-                    id="email"
-                    name="email"
-                    value={credentials.email}
-                    onChange={handleChange}
-                    placeholder="Tu ID o correo electrónico" required/>
-          </div>
-          <div className="mb-4">
-          <Label htmlFor="password">Contraseña</Label>
-               <Input  type="password"
-                      id="password"
-                      name="password"
-                      value={credentials.password}
-                      onChange={handleChange}
-                      placeholder="••••••••" required/>
-          </div>
-          <div className="text-right mb-6">
-              <LinkText href="/forgot-password">
-                  Olvidé mi Contraseña
-              </LinkText>
-          </div>
-          <Button type="submit">Ingresar</Button>
-        </form>
-        <div className="mt-6 text-center">
-          <TextButton>Intentar con Reconocimiento Facial de Nuevo</TextButton>
-        </div>
+            <Flex justify="center" className="mb-6">
+              <Avatar/>
+            </Flex>   
+          <Heading>Iniciar Sesión con Contraseña</Heading>
+          <form onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label htmlFor="email">ID de Empleado / Email</Label>
+                <Input  type="text"
+                        id="email"
+                        name="email"
+                        value={credentials.email}
+                        onChange={handleChange}
+                        placeholder="Tu ID o correo electrónico" required/>
+            </FormGroup>       
+            <FormGroup>
+                <Label htmlFor="password">Contraseña</Label>
+                <Input  type="password"
+                        id="password"
+                        name="password"
+                        value={credentials.password}
+                        onChange={handleChange}
+                        placeholder="••••••••" required/>
+            </FormGroup>   
+            <Flex justify="end" className="mb-6">
+               <LinkText href="/forgot-password">
+                    Olvidé mi Contraseña
+                </LinkText>
+            </Flex>                    
+            <Button type="submit">Ingresar</Button>
+          </form>
+          <Flex justify="center" className="mt-6">
+            <TextButton>
+              Intentar con Reconocimiento Facial de Nuevo
+            </TextButton>
+          </Flex>
       </Card>
     </Container>      
   );
