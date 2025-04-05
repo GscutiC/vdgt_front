@@ -1,7 +1,11 @@
-const SignUp = () => {
-    return (
-        <div>Aqui tiene que ir la pagina del register</div>
-    )
-}
+'use client';
+import { useState } from 'react';
+import {Button, Input, Label,LinkText,TextButton,Card, Avatar} from '@/components/ui';
 
-export default SignUp
+export default function RegisterForm() {
+  return (
+    <Card>
+      <Avatar/>
+    </Card>
+  );
+}
