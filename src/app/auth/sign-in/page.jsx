@@ -1,12 +1,65 @@
-import React from "react"
+'use client';
+import { useState } from 'react';
+import {Button, Input, Label,LinkText,TextButton,Card,Avatar,Container,FormGroup,Flex,Heading} from '@/components/ui';
 
+export default function LoginForm() {
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: ''
+  });
 
-const SignInPage = () => {
-    return (
-        <div className="flex-1 py-36 md:px-16 w-full">
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCredentials(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-            <h1 className="text-2xl font-bold text-white">Iniciar Sesión</h1>
-        </div>
-    )
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Intentando iniciar sesión con:', credentials);
+  };
+
+  return (
+    <Container>
+        <Card>
+            <Flex justify="center" className="mb-6">
+              <Avatar/>
+            </Flex>   
+          <Heading>Iniciar Sesión con Contraseña</Heading>
+          <form onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label htmlFor="email">ID de Empleado / Email</Label>
+                <Input  type="text"
+                        id="email"
+                        name="email"
+                        value={credentials.email}
+                        onChange={handleChange}
+                        placeholder="Tu ID o correo electrónico" required/>
+            </FormGroup>       
+            <FormGroup>
+                <Label htmlFor="password">Contraseña</Label>
+                <Input  type="password"
+                        id="password"
+                        name="password"
+                        value={credentials.password}
+                        onChange={handleChange}
+                        placeholder="••••••••" required/>
+            </FormGroup>   
+            <Flex justify="end" className="mb-6">
+               <LinkText href="/forgot-password">
+                    Olvidé mi Contraseña
+                </LinkText>
+            </Flex>                    
+            <Button type="submit">Ingresar</Button>
+          </form>
+          <Flex justify="center" className="mt-6">
+            <TextButton>
+              Intentar con Reconocimiento Facial de Nuevo
+            </TextButton>
+          </Flex>
+      </Card>
+    </Container>      
+  );
 }
-export default SignInPage
