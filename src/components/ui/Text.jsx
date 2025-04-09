@@ -3,7 +3,7 @@ import React from 'react';
 
 export function Text({children,...props}){
     return(
-        <p className="text-center mb-6"{...props}>
+        <p className=" mb-6 text-center"{...props}>
             {children}
         </p>
     )
