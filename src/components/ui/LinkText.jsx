@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export function LinkText({href,children,...props}){
     return(
-        <Link href={href} className="text-cyan-400 text-sm hover:underline" {...props}>
+        <Link href={href} className="text-slate-300 text-xs hover:text-white transition-colors" {...props}>
               {children}
         </Link>
     )

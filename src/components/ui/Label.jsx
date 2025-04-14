@@ -3,7 +3,7 @@ import React from 'react';
 
 export function Label({children,...props}){
     return(
-        <label className="block mb-2 text-sm"
+        <label className="block text-gray-300 text-xs uppercase mb-2"
         {...props}>
             {children}
         </label>

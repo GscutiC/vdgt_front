@@ -10,3 +10,5 @@ export {Flex} from './Flex.jsx';
 export {Heading} from './Heading.jsx';
 export {FormGroup} from './FormGroup.jsx';
 export {Text} from './Text.jsx';
+export {FacialRecognitionBox} from './FacialRecognitionBox.jsx';
+export {StepsIndicator} from './stepsIndicator.jsx';
