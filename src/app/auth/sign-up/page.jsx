@@ -12,14 +12,12 @@ import {
   Flex,
   TextButton,
   Heading,
-  StepsIndicator,
-  LinkText,
   FacialRecognitionBox
 } from '@/components/ui';
 
 export default function RegisterForm() {
   const [currentStep, setCurrentStep] = useState(1); 
-  
+
   const [formData, setFormData] = useState({
     fullName: '',
     employeeId: '',
@@ -88,7 +86,19 @@ export default function RegisterForm() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  placeholder="Nombres y Apellidos"
+                  placeholder="Nombre Apellido"
+                  required
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="employeeId">ID de Empleado</Label>
+                <Input
+                  type="text"
+                  id="employeeId"
+                  name="employeeId"
+                  value={formData.employeeId}
+                  onChange={handleChange}
+                  placeholder="ID único"
                   required
                 />
               </FormGroup>
@@ -145,6 +155,7 @@ export default function RegisterForm() {
                 ¿Ya tienes cuenta? Iniciar Sesión
               </button>
             </form>
+=
           </>
         )}
 
@@ -154,6 +165,7 @@ export default function RegisterForm() {
             <StepsIndicator currentStep={currentStep} steps={3} className="mb-6" />
             <Text className="text-lg mb-4 p-1 text-white/80">Sigue estas instrucciones para un registro exitoso:</Text>
             <ul className="space-y-2 mb-6 text-white/70">
+
               <li className="flex items-start">
                 <span className="mr-2">•</span>
                 <span>Busca un lugar con buena iluminación.</span>
@@ -181,6 +193,7 @@ export default function RegisterForm() {
           <>
             <Heading>Configuración de Reconocimiento Facial</Heading>
             <StepsIndicator currentStep={currentStep} steps={3} className="mb-6" />
+
             <FacialRecognitionBox 
               showProgressBar={true} 
               progressValue={70} 
@@ -196,6 +209,7 @@ export default function RegisterForm() {
             <Button onClick={() => window.location.href = '/auth/sign-in'}
             >Cancelar Registro Facial
             </Button> 
+
           </>
         )}
         {currentStep === 4 && (

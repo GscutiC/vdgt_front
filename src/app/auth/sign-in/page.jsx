@@ -5,6 +5,7 @@ import {
   Input, 
   Label, 
   LinkText, 
+  TextButton,
   Card, 
   Avatar, 
   FacialRecognitionBox,
@@ -35,7 +36,6 @@ export default function LoginForm() {
     e.preventDefault();
     console.log('Intentando iniciar sesión con:', credentials);
   };
-
   const toggleLoginMethod = () => {
     setLoginMethod(loginMethod === 'password' ? 'facial' : 'password');
   };
@@ -70,7 +70,6 @@ export default function LoginForm() {
                   required
                 />
               </FormGroup>
-              
               <FormGroup>
                 <Label htmlFor="password" >
                   Contraseña
@@ -85,7 +84,6 @@ export default function LoginForm() {
                   required
                 />
               </FormGroup>
-              
               <Flex justify="end" className="mb-4">
                 <LinkText href="/forgot-password" >
                   ¿Olvidó su contraseña?

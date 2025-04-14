@@ -11,5 +11,4 @@ export function Heading({children, className, ...props}) {
     </h1>
   );
 }
-
-export default Heading;
+export default Heading
