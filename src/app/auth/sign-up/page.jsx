@@ -12,7 +12,8 @@ import {
   Flex,
   TextButton,
   Heading,
-  FacialRecognitionBox
+  FacialRecognitionBox,
+  StepsIndicator
 } from '@/components/ui';
 
 export default function RegisterForm() {
@@ -87,18 +88,6 @@ export default function RegisterForm() {
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder="Nombre Apellido"
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="employeeId">ID de Empleado</Label>
-                <Input
-                  type="text"
-                  id="employeeId"
-                  name="employeeId"
-                  value={formData.employeeId}
-                  onChange={handleChange}
-                  placeholder="ID único"
                   required
                 />
               </FormGroup>
