@@ -1,18 +1,10 @@
 'use client';
 import React from 'react';
 
-export function FormGroup({ children, className, spacing = "medium", ...props }) {
-  const spacingClasses = {
-    small: "mb-2",
-    medium: "mb-4",
-    large: "mb-6"
-  };
-  
-  const spacingClass = spacingClasses[spacing] || spacingClasses.medium;
-  
+export function FormGroup({children, className, ...props}) {
   return (
     <div 
-      className={`${spacingClass} ${className || ''}`} 
+      className={`mb-4 ${className || ''}`}
       {...props}
     >
       {children}

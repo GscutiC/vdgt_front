@@ -16,8 +16,8 @@ import {
 } from '@/components/ui';
 
 export default function RegisterForm() {
-  const [currentStep, setCurrentStep] = useState(1); // Paso 1: datos, Paso 2: configuración facial
-  
+  const [currentStep, setCurrentStep] = useState(1); 
+
   const [formData, setFormData] = useState({
     fullName: '',
     employeeId: '',
@@ -25,6 +25,21 @@ export default function RegisterForm() {
     password: '',
     confirmPassword: ''
   });
+  
+  const getContainerClassName = () => {
+    switch(currentStep) {
+      case 1:
+        return "py-5 h-auto";
+      case 2:
+        return "py-19 h-screen";
+      case 3:
+        return "py-5 h-auto";
+      case 4:
+        return "py-5 h-screen";
+      default:
+        return "py-5 h-auto";
+    }
+  };
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,34 +54,31 @@ export default function RegisterForm() {
     console.log('Datos de registro:', formData);
     setCurrentStep(2);
   };
-
+  
   const handleStartFacialSetup = () => {
     console.log('Activando cámara para reconocimiento facial');
     setCurrentStep(3);
   };
-
+  
   const handleFacialDetectionComplete = () => {
     console.log('Registro facial completado y enviado');
     setCurrentStep(4);
   };
-
+  
   return (
-    <Container>
+    <Container className={getContainerClassName()}>
       <Card>
-        <Flex justify="center" className="mb-6">
+        <Flex justify="center" className="mb-4">
            <Avatar/>
         </Flex>
         {currentStep === 1 && (
           <>
             <Heading>Registro de Nuevo Usuario</Heading>
-            <Text className="text-center text-gray-300">
-              Completa tus datos para crear tu cuenta.
-            </Text>
-            <Text className="text-center text-cyan-400">
-              Paso 1 de 3
-            </Text>
+            <Text>Completa tus datos para crear tu cuenta.</Text>
+            <StepsIndicator currentStep={currentStep} steps={3} className="mb-6" />
+
             <form onSubmit={handleSubmit}>
-              <FormGroup>
+              <FormGroup className="mb-2">
                 <Label htmlFor="fullName">Nombre Completo</Label>
                 <Input
                   type="text"
@@ -129,23 +141,31 @@ export default function RegisterForm() {
               <Button type="submit">
                 Siguiente: Registrar Rostro
               </Button>
-            </form>
-            <Flex justify="center" className="mt-6">
-              <TextButton onClick={() => window.location.href = '/auth/sign-in'}>
+              <div className="flex items-center my-4">
+                <div className="flex-1 h-px bg-white/10"></div>
+                <div className="px-4 text-xs text-slate-400">O</div>
+                <div className="flex-1 h-px bg-white/10"></div>
+              </div>
+              <button 
+                type="button"
+                onClick={() => window.location.href = '/auth/sign-in'}
+                className="w-full flex items-center justify-center p-3 text-slate-300 border border-white/10 rounded-lg hover:bg-white/5 transition-all text-sm"
+              >
+                <span className="inline-block w-3 h-3 bg-slate-300 rounded-full mr-2"></span>
                 ¿Ya tienes cuenta? Iniciar Sesión
-              </TextButton>
-           </Flex>
+              </button>
+            </form>
+=
           </>
         )}
 
         {currentStep === 2 && (
           <>
             <Heading>Configuración de Reconocimiento Facial</Heading>
-            <Text className="text-center text-cyan-400">
-              Paso 2 de 3
-            </Text>
-            <Text className="text-lg mb-4 p-1">Sigue estas instrucciones para un registro exitoso:</Text>
-            <ul className="space-y-2 mb-6">
+            <StepsIndicator currentStep={currentStep} steps={3} className="mb-6" />
+            <Text className="text-lg mb-4 p-1 text-white/80">Sigue estas instrucciones para un registro exitoso:</Text>
+            <ul className="space-y-2 mb-6 text-white/70">
+
               <li className="flex items-start">
                 <span className="mr-2">•</span>
                 <span>Busca un lugar con buena iluminación.</span>
@@ -172,9 +192,8 @@ export default function RegisterForm() {
         {currentStep === 3 &&(
           <>
             <Heading>Configuración de Reconocimiento Facial</Heading>
-            <Text className="text-center text-cyan-400">
-              Paso 3 de 3
-            </Text>
+            <StepsIndicator currentStep={currentStep} steps={3} className="mb-6" />
+
             <FacialRecognitionBox 
               showProgressBar={true} 
               progressValue={70} 
@@ -182,16 +201,15 @@ export default function RegisterForm() {
               <span className="text-gray-300 text-sm">Centra tu rostro en el marco.</span>
             </FacialRecognitionBox>
             <Flex justify="center">
-              <TextButton 
+              <TextButton className="text-cyan-200"
                 onClick={handleFacialDetectionComplete}>
-                Completar Registro (Demo)
+                (Demo)
               </TextButton>
             </Flex>
-            <Flex justify="center">
-              <TextButton onClick={() => setCurrentStep(2)}>
-                Cancelar Registro Facial
-              </TextButton>
-            </Flex>
+            <Button onClick={() => window.location.href = '/auth/sign-in'}
+            >Cancelar Registro Facial
+            </Button> 
+
           </>
         )}
         {currentStep === 4 && (
