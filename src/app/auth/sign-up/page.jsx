@@ -15,9 +15,12 @@ import {
   FacialRecognitionBox,
   StepsIndicator
 } from '@/components/ui';
+import { useRegister } from '@/hooks/auth/use-register';
 
 export default function RegisterForm() {
   const [currentStep, setCurrentStep] = useState(1); 
+  const {registerUser, isLoading, error, success} = useRegister();
+  const [facialData, setFacialData] = useState(null);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -61,11 +64,70 @@ export default function RegisterForm() {
     setCurrentStep(3);
   };
   
-  const handleFacialDetectionComplete = () => {
-    console.log('Registro facial completado y enviado');
-    setCurrentStep(4);
+  const handleCompleteRegistration = async () => {
+    // Simulamos que se capturó el rostro
+    const simulatedFaceData = 'face_data_placeholder';
+    setFacialData(simulatedFaceData);
+    
+    try {
+      // Importante: Enviar formData directamente, no como propiedad de un objeto
+      const result = await registerUser(formData, simulatedFaceData);
+      console.log('Registro completado exitosamente:', result);
+      
+      // Avanzar al paso de confirmación
+      setCurrentStep(4);
+    } catch (err) {
+      console.error('Error al registrar usuario:', err);
+      // El manejo de errores ya está implementado en useRegister hook
+    }
   };
-  
+// Agregar después de handleCompleteRegistration
+
+const handleFacialDetectionComplete = async () => {
+  try {
+    // 1. Acceder a la cámara del usuario
+    const stream = await navigator.mediaDevices.getUserMedia({ 
+      video: { 
+        width: { ideal: 640 },
+        height: { ideal: 480 },
+        facingMode: "user" // Cámara frontal
+      } 
+    });
+    
+    // 2. Crear un elemento video para mostrar la cámara (temporal)
+    const video = document.createElement('video');
+    video.srcObject = stream;
+    await video.play();
+    
+    // 3. Crear un canvas para capturar la imagen
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    
+    // 4. Dibujar el fotograma actual en el canvas
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // 5. Convertir la imagen a base64
+    const capturedImage = canvas.toDataURL('image/jpeg');
+    
+    // 6. Detener la cámara
+    stream.getTracks().forEach(track => track.stop());
+    
+    // 7. Guardar los datos de la imagen
+    setFacialData(capturedImage);
+    console.log('Imagen facial capturada correctamente');
+    
+    // 8. Continuar con el registro
+    handleCompleteRegistration();
+    
+  } catch (error) {
+    console.error('Error al acceder a la cámara:', error);
+    alert('No se pudo acceder a la cámara. Por favor, verifica los permisos del navegador.');
+  }
+};
+
+
   return (
     <Container className={getContainerClassName()}>
       <Card>
@@ -184,20 +246,32 @@ export default function RegisterForm() {
             <StepsIndicator currentStep={currentStep} steps={3} className="mb-6" />
 
             <FacialRecognitionBox 
-              showProgressBar={true} 
-              progressValue={70} 
-              statusText="Rostro detectado. Mantente quieto...">
-              <span className="text-gray-300 text-sm">Centra tu rostro en el marco.</span>
-            </FacialRecognitionBox>
+      showProgressBar={true} 
+      progressValue={70} 
+      statusText="Rostro detectado. Mantente quieto..."
+      onCapture={(imageData) => {
+        setFacialData(imageData);
+        console.log('Imagen capturada desde componente');
+      }}
+    >
+      <span className="text-gray-300 text-sm">Centra tu rostro en el marco.</span>
+    </FacialRecognitionBox>
+            
             <Flex justify="center">
-              <TextButton className="text-cyan-200"
-                onClick={handleFacialDetectionComplete}>
+              <TextButton 
+              className="text-cyan-200"
+              onClick={() => handleFacialDetectionComplete()}
+              disabled={isLoading}>
                 (Demo)
               </TextButton>
             </Flex>
-            <Button onClick={() => window.location.href = '/auth/sign-in'}
-            >Cancelar Registro Facial
-            </Button> 
+            <Button 
+      onClick={handleCompleteRegistration}
+      disabled={isLoading || !facialData}
+      className="w-full bg-green-600 hover:bg-green-700"
+    >
+      {isLoading ? 'Enviando datos...' : 'Completar Registro'}
+    </Button> 
 
           </>
         )}
