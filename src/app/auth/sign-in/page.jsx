@@ -15,9 +15,14 @@ import {
   Flex, 
   Heading
 } from '@/components/ui';
+import { useLogin } from '@/hooks/auth/use-login';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
-  const [loginMethod, setLoginMethod] = useState('password'); 
+  const router = useRouter();
+  const [loginMethod, setLoginMethod] = useState('password');
+  const { login, isLoading, error, success } = useLogin();
+  const [facialData, setFacialData] = useState(null);
   
   const [credentials, setCredentials] = useState({
     email: '',
@@ -32,12 +37,53 @@ export default function LoginForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Intentando iniciar sesión con:', credentials);
+    
+    try {
+      const result = await login(credentials);
+      console.log('Login exitoso:', result);
+      
+      // Redirigir al dashboard o página principal
+      router.push('/dashboard');
+    } catch (err) {
+      // El error ya se maneja en el hook
+      console.error('Error al iniciar sesión:', err);
+    }
   };
+
+  const handleFacialLogin = async (imageData) => {
+    if (!imageData) return;
+    
+    setFacialData(imageData);
+    console.log('Imagen facial capturada para login');
+    
+    try {
+      // Intentar login con reconocimiento facial
+      const result = await login({ email: '' }, imageData);
+      console.log('Login facial exitoso:', result);
+      
+      // Redirigir al dashboard o página principal
+      router.push('/dashboard');
+    } catch (err) {
+      // El error ya se maneja en el hook
+      console.error('Error en login facial:', err);
+    }
+  };
+
   const toggleLoginMethod = () => {
     setLoginMethod(loginMethod === 'password' ? 'facial' : 'password');
+  };
+  
+  const renderErrorMessage = () => {
+    if (!error) return null;
+    
+    return (
+      <div className="p-2 my-2 bg-red-500/20 border border-red-500/30 rounded text-red-400 text-sm">
+        {error}
+      </div>
+    );
   };
 
   return (
@@ -49,6 +95,8 @@ export default function LoginForm() {
             <div className="text-white text-base font-semibold">NOMBRE DE LA EMPRESA</div>
           </div>
         </Flex>
+        
+        {renderErrorMessage()}
         
         {loginMethod === 'password' ? (
           <>
@@ -90,7 +138,12 @@ export default function LoginForm() {
                 </LinkText>
               </Flex>
               
-              <Button type="submit">Ingresar al Sistema</Button>
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+              >
+                {isLoading ? 'Iniciando sesión...' : 'Ingresar al Sistema'}
+              </Button>
               
               <div className="flex items-center my-4">
                 <div className="flex-1 h-px bg-white/10"></div>
@@ -112,19 +165,24 @@ export default function LoginForm() {
           <>
             <Heading className="text-center">Reconocimiento Facial</Heading>
             <FacialRecognitionBox 
-              statusText="[Simulación de escaneo activo...]"
-              className=" rounded-lg p-4 mb-2"
+              statusText={isLoading ? "Verificando identidad..." : "Posiciona tu rostro para iniciar sesión"}
+              className="rounded-lg p-4 mb-2"
+              showProgressBar={true}
+              onCapture={handleFacialLogin}
             >
-              <span className="text-slate-300 text-sm">Posiciona tu rostro en el centro</span>
+              <span className="text-slate-300 text-sm">
+                {isLoading ? "Verificando..." : "Posiciona tu rostro en el centro"}
+              </span>
             </FacialRecognitionBox>
             
-            <Text className="text-cyan-400 text-center mb-6">
-               Buscando rostro...
+            <Text className={`text-center mb-6 ${isLoading ? "text-yellow-400" : "text-cyan-400"}`}>
+               {isLoading ? "Verificando identidad..." : "Buscando rostro..."}
             </Text>
             
             <button 
               type="button"
               onClick={toggleLoginMethod}
+              disabled={isLoading}
               className="w-full flex items-center justify-center p-3 text-slate-300 border border-white/10 rounded-lg hover:bg-white/5 transition-all text-sm"
             >
               <span className="inline-block w-3 h-3 bg-slate-300 rounded-full mr-2"></span>
