@@ -42,11 +42,15 @@ export default function LoginForm() {
     console.log('Intentando iniciar sesión con:', credentials);
     
     try {
+      // Si deseas omitir la autenticación real por ahora y solo redirigir
+      // puedes comentar estas líneas y solo usar la redirección
+      /*
       const result = await login(credentials);
       console.log('Login exitoso:', result);
+      */
       
-      // Redirigir al dashboard o página principal
-      router.push('/dashboard');
+      // Redirigir al dashboard usando el router de Next.js
+      router.push('/auth/dashboard');
     } catch (err) {
       // El error ya se maneja en el hook
       console.error('Error al iniciar sesión:', err);
@@ -60,12 +64,14 @@ export default function LoginForm() {
     console.log('Imagen facial capturada para login');
     
     try {
-      // Intentar login con reconocimiento facial
+      // Puedes comentar esta lógica si solo quieres probar la redirección
+      /*
       const result = await login({ email: '' }, imageData);
       console.log('Login facial exitoso:', result);
+      */
       
       // Redirigir al dashboard o página principal
-      router.push('/dashboard');
+      router.push('/auth/dashboard');
     } catch (err) {
       // El error ya se maneja en el hook
       console.error('Error en login facial:', err);
@@ -87,9 +93,9 @@ export default function LoginForm() {
   };
 
   return (
-    <Container className="py-10 h-screen">
+    <Container className="py-9 h-screen">
       <Card>
-        <Flex className="justify-between">
+        <Flex className="justify-between py-4">
           <Avatar />
           <div className="text-right">
             <div className="text-white text-base font-semibold">NOMBRE DE LA EMPRESA</div>
@@ -97,7 +103,7 @@ export default function LoginForm() {
         </Flex>
         
         {renderErrorMessage()}
-        
+
         {loginMethod === 'password' ? (
           <>
             <Heading>Bienvenido</Heading>
@@ -141,6 +147,7 @@ export default function LoginForm() {
               <Button 
                 type="submit" 
                 disabled={isLoading}
+                // Quitar el onClick aquí, ya que el formulario maneja la sumisión
               >
                 {isLoading ? 'Iniciando sesión...' : 'Ingresar al Sistema'}
               </Button>
@@ -154,7 +161,7 @@ export default function LoginForm() {
               <button 
                 type="button"
                 onClick={toggleLoginMethod}
-                className="w-full flex items-center justify-center p-3 text-slate-300 border border-white/10 rounded-lg hover:bg-white/5 transition-all text-sm"
+                className="w-full hover:-translate-y-0.5 flex items-center justify-center p-3 text-slate-300 border border-white/10 rounded-lg hover:bg-white/5 transition-all text-sm"
               >
                 <span className="inline-block w-3 h-3 bg-slate-300 rounded-full mr-2"></span>
                 Acceder con Reconocimiento Facial
