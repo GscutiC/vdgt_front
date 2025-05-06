@@ -4,7 +4,7 @@ import React from 'react';
 export function Heading({children, className, ...props}) {
   return (
     <h1 
-      className={`text-white text-2xl font-bold mb-2 ${className || ''}`}
+      className={`text-white text-2xl font-bold mb-1 ${className || ''}`}
       {...props}
     >
       {children}

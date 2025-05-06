@@ -259,13 +259,17 @@ export function FacialRecognitionBox({
       {/* Botón manual de captura (opcional, puedes quitarlo) */}
       <button 
         onClick={captureImage}
-        className="absolute bottom-4 right-4 bg-cyan-500 text-white rounded-full p-3 shadow-lg hover:bg-cyan-600 transition"
+        className="absolute bottom-4 right-4 bg-cyan-500 text-white rounded-full p-3 shadow-lg hover:bg-cyan-600 transition-all flex items-center justify-center"
+        title="Hacer clic para capturar imagen"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
+        <div className="absolute inset-0 rounded-full bg-cyan-400 animate-ping opacity-75"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative">
+          <path d="M8 13V4.5a1.5 1.5 0 0 1 3 0V12"></path>
+          <path d="M11 11.5v-2a1.5 1.5 0 0 1 3 0V12"></path>
+          <path d="M14 10.5a1.5 1.5 0 0 1 3 0V12"></path>
+          <path d="M17 11.5a1.5 1.5 0 0 1 3 0V16a6 6 0 0 1-6 6h-2 .208a6 6 0 0 1-5.012-2.7L7 19c-.312-.479-1.407-2.388-3.286-5.728a1.5 1.5 0 0 1 .536-2.022 1.867 1.867 0 0 1 2.28.28L8 13"></path>
         </svg>
       </button>
-      
       {/* Barra de progreso */}
       {showProgressBar && (
         <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-700">
