@@ -195,7 +195,29 @@ const NuevoProyecto = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-  
+  const vidrioOriginal = { width: 1900, height: 900 };
+
+  const cortes = [
+    { width: 900, height: 900, color: 'bg-blue-600', border: 'border-blue-800' },
+    { width: 500, height: 900, color: 'bg-blue-600', border: 'border-blue-800' },
+  ]; // El total usado será 1400, entonces el sobrante es 500mm
+  const Corte = ({ width, height, color, border }) => (
+    <div
+      className={`${color} border-2 ${border} rounded h-full flex items-center justify-center text-yellow-200 text-sm`}
+      style={{ width: `${width}px` }} // Puedes escalar si es demasiado grande
+    >
+      {width} mm x {height} mm
+    </div>
+  );
+  const Sobrante = ({ width, height }) => (
+    <div
+      className="bg-red-400 border-2 border-dashed border-red-600 rounded h-full flex items-center justify-center text-white text-sm"
+      style={{ width: `${width}px` }}
+    >
+      {width} mm sobrante
+    </div>
+  );
+
   return (
     <div className="bg-gray-800 min-h-screen py-8 px-4">
       <div className="max-w-4xl mx-auto bg-gray-900 rounded-lg shadow-xl p-6">
@@ -475,47 +497,33 @@ const NuevoProyecto = () => {
                   </table>
                 </div>
               )}
-              {activeTab === 'optimizacion' && (
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-white mb-3">Optimización de Corte de Vidrio</h3>
-                  <p className="text-gray-400 text-sm mb-4">Visualización de la distribución óptima para minimizar el desperdicio</p>
-                  <div className="bg-gray-300 p-2 rounded relative">
-                    <div className="flex mb-2">
-                      <div className="relative mr-2 flex-1">
-                        <div className="bg-blue-600 border-2 border-blue-800 rounded h-40 flex items-center justify-center text-yellow-200 text-sm">
-                          1900mm x 900mm
-                        </div>
-                      </div>
-                      <div className="relative mx-1 w-13">
-                        <div className="bg-red-300 -py-4 border-2 border-red-500 border-dashed rounded h-40 w-full"></div>
-                      </div>
-                      <div className="relative ml-2 flex-1">
-                        <div className="bg-blue-600 border-2 border-blue-800 rounded h-40 flex items-center justify-center text-yellow-200 text-sm">
-                          1900mm x 900mm
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex">
-                      <div className="relative mr-2 flex-1">
-                        <div className="bg-blue-600 border-2 border-blue-800 rounded h-32 flex items-center justify-center text-yellow-200 text-sm">
-                          1400mm x 900mm
-                        </div>
-                      </div>
-                      <div className="relative mx-2 flex-1">
-                        <div className="bg-blue-600 border-2 border-blue-800 rounded h-32 flex items-center justify-center text-yellow-200 text-sm">
-                          1400mm x 900mm
-                        </div>
-                      </div>
-                      <div className="relative ml-2 flex-1">
-                        <div className="bg-blue-600 border-2 border-blue-800 rounded h-32 flex items-center justify-center text-yellow-200 text-sm">
-                          900mm x 900mm
-                        </div>
-                      </div>
-                    </div>
+               {activeTab === 'optimizacion' && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-white mb-3">Optimización de Corte de Vidrio</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  Visualización de la distribución óptima para minimizar el desperdicio
+                </p>
+
+                <div className="bg-gray-300 p-4 rounded overflow-x-auto">
+                  <div className="flex h-40 items-stretch">
+                    {cortes.map((corte, idx) => (
+                      <Corte key={idx} {...corte} height={vidrioOriginal.height} />
+                    ))}
+
+                    {/* Cálculo de sobrante */}
+                    {(() => {
+                      const anchoUsado = cortes.reduce((acc, c) => acc + c.width, 0);
+                      const sobrante = vidrioOriginal.width - anchoUsado;
+                      if (sobrante > 0) {
+                        return <Sobrante width={sobrante} height={vidrioOriginal.height} />;
+                      }
+                      return null;
+                    })()}
                   </div>
                 </div>
-              )}
+              </div>
+               )}
+
               <div className="mt-6 flex justify-end">               
                 <button className="bg-blue-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-md font-medium transition-colors">
                   Generar Cotización PDF
